@@ -1,10 +1,9 @@
 pipeline {
     agent any
-        tools{
-            maven 'maven'
-        }
+    tools {
+        maven 'maven'
+    }
     
-
     stages {
         stage('test') {
             steps {
@@ -12,21 +11,18 @@ pipeline {
             }
         }
         
-         stages {
         stage('build') {
             steps {
                 sh 'mvn package'
             }
         }
         
-         stages {
         stage('deploy on test') {
             steps {
                 deploy adapters: [tomcat9(credentialsId: 'jenkinsid', path: '', url: 'http://10.0.128.120:8080/')], contextPath: '/test', war: '**/*.war'
             }
         }
         
-         stages {
         stage('deploy on prod') {
             steps {
                 deploy adapters: [tomcat9(credentialsId: 'jenkinsid', path: '', url: 'http://10.0.128.118:8080/')], contextPath: '/test', war: '**/*.war'
